@@ -1,6 +1,7 @@
 ﻿
 using AutoMapper;
 using FilmesApi.Data;
+using FilmesApi.Services;
 using FilmesAPI.Data;
 using FilmesAPI.Data.Dtos;
 using FilmesAPI.Models;
@@ -16,13 +17,11 @@ namespace FilmesAPI.Controllers
     [Route("[controller]")]
     public class FilmeController : ControllerBase
     {
-        private AppDbContext _context;
-        private IMapper _mapper;
+     private FilmeServices = _filmeServices;  
 
-        public FilmeController(AppDbContext context, IMapper mapper)
+        public FilmeController()
         {
-            _context = context;
-            _mapper = mapper;
+           
         }
 
 

@@ -2,6 +2,7 @@
 using FilmesApi.Data;
 using FilmesAPI.Data.Dtos;
 using FilmesAPI.Models;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -70,8 +71,9 @@ namespace FilmesAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult AtualizaCinema(int id, [FromBody] UpdateCinemaDto cinemaDto)
         {
+            Result resultado = _cinemaServices.AtualizaCinema(id, cinemaDto)
             Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
-            if(cinema == null)
+            if(resultado.IsFailed)
             {
                 return NotFound();
             }
@@ -82,16 +84,16 @@ namespace FilmesAPI.Controllers
 
 
         [HttpDelete("{id}")]
-        public IActionResult DeletaCinema(int id)
+        public Result DeletaCinema(int id)
         {
             Cinema cinema = _context.Cinemas.FirstOrDefault(cinema => cinema.Id == id);
             if (cinema == null)
             {
-                return NotFound();
+                return Result.Fail("Cinema não encontrado");
             }
             _context.Remove(cinema);
             _context.SaveChanges();
-            return NoContent();
+            return Result.Ok();
         }
 
     }
