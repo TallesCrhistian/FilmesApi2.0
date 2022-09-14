@@ -5,6 +5,7 @@ using FilmesApi.Services;
 using FilmesAPI.Data;
 using FilmesAPI.Data.Dtos;
 using FilmesAPI.Models;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -17,21 +18,22 @@ namespace FilmesAPI.Controllers
     [Route("[controller]")]
     public class FilmeController : ControllerBase
     {
-     private FilmeServices = _filmeServices;  
+     private FilmeServices  _filmeServices;  
 
-        public FilmeController()
+        public FilmeController(FilmeServices filmeServices)
         {
-           
+            _filmeServices = filmeServices;
         }
 
 
         [HttpPost]
         public IActionResult AdicionaFilme([FromBody] CreateFilmeDto filmeDto)
         {
-            Filme filme = _mapper.Map<Filme>(filmeDto);
-            _context.Filmes.Add(filme);
-            _context.SaveChanges();
-            return CreatedAtAction(nameof(RecuperaFilmesPorId), new { Id = filme.Id }, filme);
+            ReadFilmeDto readDto = _filmeServices.AdicionaFilme(filmeDto);
+
+
+            
+            return CreatedAtAction(nameof(RecuperaFilmesPorId), new { Id = readDto.Id }, readDto);
         }
 
         [HttpGet]
